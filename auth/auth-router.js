@@ -14,7 +14,7 @@ router.post("/register", async (req, res) => {
     const token = generateToken(user);
     res.status(201).json({ message: `Welcome, ${user.username}!`, token });
   } catch (error) {
-    res.status(500).json({ message: "error registering new user" });
+    res.status(500).json({ error: "error registering new user" });
   }
 });
 
@@ -29,7 +29,7 @@ router.post("/login", async (req, res) => {
       res.status(401).json({ message: "invalid credentials" });
     }
   } catch (error) {
-    res.status(500).json({ message: "there was an error logging in" });
+    res.status(500).json({ error: "there was an error logging in" });
   }
 });
 
