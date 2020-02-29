@@ -24,4 +24,12 @@ function remove(table, id) {
     .delete();
 }
 
-module.exports = { find, findBy, insert, remove };
+function getUserSongs(id) {
+  return db("users as u")
+    .select("s.spotify_id")
+    .join("user_songs as us", { "u.id": "us.user_id" })
+    .join("songs as s", { "s.id": "us.song_id" })
+    .where({ "u.id": id });
+}
+
+module.exports = { find, findBy, insert, remove, getUserSongs };
