@@ -15,7 +15,7 @@ async function insert(table, data) {
     .returning("id")
     .insert(data);
 
-  return await findBy({ id });
+  return await findBy("users", { id });
 }
 
 function remove(table, id) {
