@@ -23,7 +23,7 @@ exports.up = function(knex) {
         .notNullable()
         .references("id")
         .inTable("users")
-        .onDelete("RESTRICT")
+        .onDelete("CASCADE")
         .onUpdate("CASCADE");
       tbl
         .integer("song_id")
@@ -31,7 +31,7 @@ exports.up = function(knex) {
         .notNullable()
         .references("id")
         .inTable("songs")
-        .onDelete("RESTRICT")
+        .onDelete("CASCADE")
         .onUpdate("CASCADE");
     });
 };

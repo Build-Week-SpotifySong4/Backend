@@ -4,7 +4,7 @@ const dummyPW = bcrypt.hashSync("123abc", 10);
 exports.seed = function(knex) {
   // Deletes ALL existing entries
   return knex("users")
-    .truncate()
+    .del()
     .then(function() {
       // Inserts seed entries
       return knex("users").insert([

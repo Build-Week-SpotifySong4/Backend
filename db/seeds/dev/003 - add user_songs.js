@@ -1,7 +1,7 @@
 exports.seed = function(knex) {
   // Deletes ALL existing entries
   return knex("user_songs")
-    .truncate()
+    .del()
     .then(function() {
       // Inserts seed entries
       return knex("user_songs").insert([
@@ -14,7 +14,7 @@ exports.seed = function(knex) {
         { user_id: 7, song_id: 7 },
         { user_id: 8, song_id: 7 },
         { user_id: 9, song_id: 8 },
-        { user_id: 10, song_id: 9 }
+        { user_id: 10, song_id: 8 }
       ]);
     });
 };

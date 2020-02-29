@@ -1,11 +1,10 @@
 exports.seed = function(knex) {
   // Deletes ALL existing entries
   return knex("songs")
-    .truncate()
+    .del()
     .then(function() {
       // Inserts seed entries
       return knex("songs").insert([
-        { spotify_id: "1EiR6pce8KgrYGmPGU5xjY" },
         { spotify_id: "1EiR6pce8KgrYGmPGU5xjY" },
         { spotify_id: "2lwwrWVKdf3LR9lbbhnr6R" },
         { spotify_id: "21Phj46KeUHOWyZW9A9b7P" },
