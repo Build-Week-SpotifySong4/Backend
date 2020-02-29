@@ -10,7 +10,7 @@ router.post("/register", async (req, res) => {
   data.password = hash;
 
   try {
-    const user = await db.insert("users", data);
+    const user = await db.insert("users", data, "id");
     const token = generateToken(user);
     res.status(201).json({ message: `Welcome, ${user.username}!`, token });
   } catch (error) {
