@@ -21,6 +21,11 @@ beforeEach(async () => {
   token = generateToken(user);
 });
 
+afterAll(done => {
+  db.closeConnection();
+  done();
+});
+
 describe("songs router - ALL", () => {
   it("should return a 401 for unauthenticated users", async () => {
     const getResponse = await request(server).get("/api/songs");
