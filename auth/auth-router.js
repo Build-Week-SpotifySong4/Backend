@@ -3,7 +3,9 @@ const router = require("express").Router();
 const bcrypt = require("bcryptjs");
 const { generateToken, getSpotifyAuth } = require("../tokenUtils.js");
 
+
 router.post("/register", async (req, res) => {
+  console.log(req.body)
   const data = req.body;
   const hash = bcrypt.hashSync(data.password, 12);
   data.password = hash;
@@ -16,6 +18,7 @@ router.post("/register", async (req, res) => {
       .status(201)
       .json({ message: `Welcome, ${user.username}!`, token, spotifyToken });
   } catch (error) {
+    console.log(error)
     res.status(500).json({ error: "error registering new user" });
   }
 });

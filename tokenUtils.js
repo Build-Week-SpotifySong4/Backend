@@ -29,7 +29,7 @@ async function getSpotifyAuth() {
 
     return res.data.access_token;
   } catch (error) {
-    console.log(err);
+    console.log(error);
   }
 }
 
