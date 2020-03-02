@@ -5,7 +5,7 @@ module.exports = {
     client: "pg",
     connection: {
       database: "spotify_development",
-      port: 5432,
+      port: process.env.LOCAL_PORT,
       user: process.env.DB_USER,
       password: process.env.DB_PASSWORD
     },
@@ -22,7 +22,7 @@ module.exports = {
     client: "pg",
     connection: {
       database: "spotify_testing",
-      port: 5432,
+      port: process.env.LOCAL_PORT,
       user: process.env.DB_USER,
       password: process.env.DB_PASSWORD
     },
