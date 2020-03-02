@@ -22,28 +22,32 @@ router.delete("/:id", async (req, res) => {
 router.post("/", async (req, res) => {
   const { spotify_id } = req.body;
   try {
-    // check if it's already in songs table
-    const songExists = await db.findBy("songs", { spotify_id });
-    let newSongID;
+    if (spotify_id) {
+      // check if it's already in songs table
+      const songExists = await db.findBy("songs", { spotify_id });
+      let newSongID;
 
-    if (songExists) {
-      newSongID = songExists.id;
+      if (songExists) {
+        newSongID = songExists.id;
+      } else {
+        // insert into songs
+        newSongID = await db.insert("songs", { spotify_id }, "id");
+        newSongID = newSongID.id;
+      }
+
+      // insert into user songs
+      const [newSavedSong] = await db.saveSong({
+        song_id: newSongID,
+        user_id: req.user.id
+      });
+
+      res.status(201).json({
+        message: "Successfully saved song to your favorites",
+        savedSong: newSavedSong
+      });
     } else {
-      // insert into songs
-      newSongID = await db.insert("songs", { spotify_id }, "id");
-      newSongID = newSongID.id;
+      res.status(400).json({ error: "invalid input" });
     }
-
-    // insert into user songs
-    const newSavedSong = await db.saveSong({
-      song_id: newSongID,
-      user_id: req.user.id
-    });
-
-    res.status(200).json({
-      message: "Successfully saved song to your favorites",
-      savedSong: newSavedSong
-    });
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "server error" });
