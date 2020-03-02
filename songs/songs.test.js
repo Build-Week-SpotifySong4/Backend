@@ -21,13 +21,15 @@ beforeEach(async () => {
   token = generateToken(user);
 });
 
-describe("songs router - GET", () => {
+describe("songs router - ALL", () => {
   it("should return a 401 for unauthenticated users", async () => {
     const res = await request(server).get("/api/songs");
 
     expect(res.status).toBe(401);
   });
+});
 
+describe("songs router - GET", () => {
   it("should return a 200 for authenticated users", async () => {
     const res = await request(server)
       .get("/api/songs")
@@ -49,5 +51,30 @@ describe("songs router - GET", () => {
         })
       ])
     );
+  });
+});
+
+describe("songs router - POST", () => {
+  it("should add a song to the database", async () => {
+    const res = await request(server)
+      .post("/api/songs")
+      .set("Authorization", token)
+      .send({ spotify_id: "09opLVMX7cfKVKlP3iKZR1" });
+
+    expect(res.status).toBe(201);
+    expect(res.body).toEqual(
+      expect.objectContaining({
+        message: "Successfully saved song to your favorites"
+      })
+    );
+  });
+
+  it("should reject invalid input", async () => {
+    const res = await request(server)
+      .post("/api/songs")
+      .set("Authorization", token)
+      .send({ donkey: "kong" });
+
+    expect(res.status).toBe(400);
   });
 });
