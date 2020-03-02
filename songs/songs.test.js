@@ -23,9 +23,13 @@ beforeEach(async () => {
 
 describe("songs router - ALL", () => {
   it("should return a 401 for unauthenticated users", async () => {
-    const res = await request(server).get("/api/songs");
+    const getResponse = await request(server).get("/api/songs");
+    const postResponse = await request(server).post("/api/songs");
+    const deleteResponse = await request(server).delete("/api/songs");
 
-    expect(res.status).toBe(401);
+    expect(getResponse.status).toBe(401);
+    expect(postResponse.status).toBe(401);
+    expect(deleteResponse.status).toBe(401);
   });
 });
 
@@ -55,7 +59,7 @@ describe("songs router - GET", () => {
 });
 
 describe("songs router - POST", () => {
-  it("should add a song to the database", async () => {
+  it("should add a song to the user's saved songs", async () => {
     const res = await request(server)
       .post("/api/songs")
       .set("Authorization", token)
@@ -74,6 +78,32 @@ describe("songs router - POST", () => {
       .post("/api/songs")
       .set("Authorization", token)
       .send({ donkey: "kong" });
+
+    expect(res.status).toBe(400);
+  });
+});
+
+describe("songs router - DELETE", () => {
+  it("should delete a song from the user's saved songs", async () => {
+    const res = await request(server)
+      .delete("/api/songs/3")
+      .set("Authorization", token);
+
+    const {
+      body: { songs: userSongs }
+    } = await request(server)
+      .get("/api/songs")
+      .set("Authorization", token);
+
+    expect(res.status).toBe(200);
+    expect(res.body.message).toBe("Successfully deleted song");
+    expect(userSongs.length).toBeFalsy();
+  });
+
+  it("should reject bad requests", async () => {
+    const res = await request(server)
+      .delete("/api/songs")
+      .set("Authorization", token);
 
     expect(res.status).toBe(400);
   });
