@@ -11,12 +11,20 @@ router.get("/", async (req, res) => {
   }
 });
 
+router.delete("/", (req, res) => {
+  res
+    .status(400)
+    .json({ error: "invalid request - must provide id of song to delete" });
+});
+
 router.delete("/:id", async (req, res) => {
   const { id } = req.params;
   try {
     await db.remove("user_songs", { song_id: id, user_id: req.user.id });
     res.status(200).json({ message: "Successfully deleted song" });
-  } catch (error) {}
+  } catch (error) {
+    res.status(500).json({ error: "server error" });
+  }
 });
 
 router.post("/", async (req, res) => {
