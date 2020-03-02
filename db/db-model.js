@@ -37,4 +37,17 @@ function saveSong(data) {
     .returning("song_id")
     .insert(data);
 }
-module.exports = { find, findBy, insert, remove, getUserSongs, saveSong };
+
+function closeConnection() {
+  return db.destroy();
+}
+
+module.exports = {
+  find,
+  findBy,
+  insert,
+  remove,
+  getUserSongs,
+  saveSong,
+  closeConnection
+};
