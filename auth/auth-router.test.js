@@ -9,6 +9,12 @@ const testuser = {
   password: "pass2"
 };
 
+afterAll(done => {
+  // manually close db connection after tests to resolve "improper teardown" warning
+  dbModel.closeConnection();
+  done();
+});
+
 describe("First Test", function() {
   describe("test enivronment", function() {
     it("should use the testing environment", function() {
@@ -24,8 +30,13 @@ describe("First Test", function() {
     });
     it("adds the new user to the db", async function() {
       await dbModel.insert("users", testuser, "id");
-      const user = await db("users");
-      expect(user).toHaveLength(1);
+      const users = await db("users");
+      // test the specific user inserted - prevents failing test if other tests have inserted other users
+      expect(users).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({ username: "booobbbb" })
+        ])
+      );
     });
   });
 });
@@ -43,7 +54,6 @@ describe("Testing api/auth/register", () => {
     expect(resp.status).toEqual(201);
   });
 });
-
 
 describe("Testing api/auth/login", () => {
   it("responds with 201", async () => {
